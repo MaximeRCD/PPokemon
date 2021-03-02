@@ -9,9 +9,10 @@ using namespace std;
 
 int main()
 {
-    affiche_menu_jeu();
-    menu_interactif();
-    return 0;
+    //affiche_menu_jeu();
+    //menu_interactif();
+
+    return 0;    
 }
 
 

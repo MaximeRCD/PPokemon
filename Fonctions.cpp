@@ -1022,6 +1022,8 @@ void evolve(pokemon* p, especePokemon* bestiaire, ressources* r, historique* mon
     }
 }
 
+
+
 void insert_evolution(historique* mon_historique, string from, string to) {
     /*Création du nouvel élément*/
     Evolution* nouveau = new evolution;
@@ -1055,4 +1057,14 @@ Historique* initialisation()
     mon_historique->nombre = 0;
 
     return mon_historique;
+}
+
+HashTable* initHT() {
+    CombatEspece cases[26];
+    HashTable myHashTable;
+    myHashTable.nbr_alveole = 18;
+    myHashTable.nbr_ele = 0;
+    myHashTable.tab = cases;
+
+    return &myHashTable;
 }

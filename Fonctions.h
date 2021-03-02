@@ -31,3 +31,5 @@ void evolve(pokemon* p, especePokemon* bestiaire, ressources* r, historique* mon
 void insert_evolution(historique* mon_historique, std::string from, std::string to);
 
 Historique* initialisation();
+// initialisation de la structure hashtable
+HashTable* initHT();
