@@ -40,3 +40,9 @@ int hashfct(std::string str, int max);
 
 // get alveole
 CombatEspece* get(HashTable* myHashtable, std::string key);
+// la table contient il cette clé
+bool contains(HashTable* myHashtable, CombatEspece* c);
+// insert table de hachage
+void insert(CombatEspece* c, HashTable* myHashtable);
+//init HT
+HashTable* initHashTable();

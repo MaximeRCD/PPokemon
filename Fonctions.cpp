@@ -830,7 +830,7 @@ void init_bestiaire(especePokemon bestiaire[]) {
 }
 
 void tri(especePokemon bestiaire[])
-    {   // un entier qui sert de mémoire pour l'indice des pokémons
+    {   // un entier qui sert de mémoire pour l'indGlace des pokémons
         int a = 0;
         // parcours du bestiaire.
         while (a < 150)
@@ -1149,4 +1149,301 @@ bool contains(HashTable* myHashtable, CombatEspece* c) {
 void insert(CombatEspece* c, HashTable* myHashtable) {
     int alveole = hashfct(c->nature, 26);
     myHashtable->tab[alveole]=c;
+}
+
+HashTable* initHashTable()
+{
+    HashTable* hashtable = new HashTable;
+    hashtable->nbr_alveole = 18;
+    // Initialisation
+    for (int k = 0; k < 26; k++)
+    {
+        hashtable->tab[k] = nullptr;
+    }
+
+    // Insertions successives
+    int i = -1;
+    CombatEspece* bug = new CombatEspece;
+    bug->nature = "Bug";
+    bug->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        bug->strongAgainst[i] = nullptr;
+        bug->weakAgainst[i] = nullptr;
+    }
+    bug->strongAgainst[0] = "Dark";
+    bug->strongAgainst[1] = "Herbe";
+    bug->strongAgainst[2] = "Psychique";
+    bug->weakAgainst[0] = "Feu";
+    bug->weakAgainst[1] = "Flying";
+    bug->weakAgainst[2] = "Roche";
+    insert(bug, hashtable);
+
+    CombatEspece* dark = new CombatEspece;
+    dark->nature = "Dark";
+    dark->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        dark->strongAgainst[i] = nullptr;
+        dark->weakAgainst[i] = nullptr;
+    }
+    dark->strongAgainst[0] = "Fantome";
+    dark->strongAgainst[1] = "Psychique";
+    dark->weakAgainst[0] = "Bug";
+    dark->weakAgainst[1] = "Fairy";
+    dark->weakAgainst[2] = "Fight";
+    insert(dark, hashtable);
+
+    CombatEspece* dragon = new CombatEspece;
+    dragon->nature = "Dragon";
+    dragon->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        dragon->strongAgainst[i] = nullptr;
+        dragon->weakAgainst[i] = nullptr;
+    }
+    dragon->strongAgainst[0] = "Dragon";
+    dragon->weakAgainst[0] = "Dragon";
+    dragon->weakAgainst[1] = "Fairy";
+    dragon->weakAgainst[2] = "Glace";
+    insert(dragon, hashtable);
+
+    CombatEspece* Electrique = new CombatEspece;
+    Electrique->nature = "Electrique";
+    Electrique->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Electrique->strongAgainst[i] = nullptr;
+        Electrique->weakAgainst[i] = nullptr;
+    }
+    Electrique->strongAgainst[0] = "Flying";
+    Electrique->strongAgainst[1] = "Eau";
+    Electrique->weakAgainst[0] = "Sol";
+    insert(Electrique, hashtable);
+
+    CombatEspece* fairy = new CombatEspece;
+    fairy->nature = "Fairy";
+    fairy->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        fairy->strongAgainst[i] = nullptr;
+        fairy->weakAgainst[i] = nullptr;
+    }
+    fairy->strongAgainst[0] = "Dark";
+    fairy->strongAgainst[1] = "Dragon";
+    fairy->strongAgainst[2] = "Fight";
+    fairy->weakAgainst[0] = "Poison";
+    fairy->weakAgainst[1] = "Steel";
+    insert(fairy, hashtable);
+
+    CombatEspece* fighting = new CombatEspece;
+    fighting->nature = "Fighting";
+    fighting->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        fighting->strongAgainst[i] = nullptr;
+        fighting->weakAgainst[i] = nullptr;
+    }
+    fighting->strongAgainst[0] = "Dark";
+    fighting->strongAgainst[1] = "Glace";
+    fighting->strongAgainst[2] = "Normal";
+    fighting->strongAgainst[3] = "Roche";
+    fighting->strongAgainst[4] = "Steel";
+    fighting->weakAgainst[0] = "Fairly";
+    fighting->weakAgainst[1] = "Flying";
+    fighting->weakAgainst[2] = "Psychique";
+    insert(fighting, hashtable);
+
+    CombatEspece* Feu = new CombatEspece;
+    Feu->nature = "Feu";
+    Feu->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Feu->strongAgainst[i] = nullptr;
+        Feu->weakAgainst[i] = nullptr;
+    }
+    Feu->strongAgainst[0] = "Bug";
+    Feu->strongAgainst[1] = "Herbe";
+    Feu->strongAgainst[2] = "Glace";
+    Feu->strongAgainst[3] = "Steel";
+    Feu->weakAgainst[0] = "Sol";
+    Feu->weakAgainst[1] = "Roche";
+    Feu->weakAgainst[2] = "Eau";
+    insert(Feu, hashtable);
+
+    CombatEspece* flying = new CombatEspece;
+    flying->nature = "Flying";
+    flying->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        flying->strongAgainst[i] = nullptr;
+        flying->weakAgainst[i] = nullptr;
+    }
+    flying->strongAgainst[0] = "Bug";
+    flying->strongAgainst[1] = "Fight";
+    flying->strongAgainst[2] = "Herbe";
+    flying->weakAgainst[0] = "Electrique";
+    flying->weakAgainst[1] = "Glace";
+    flying->weakAgainst[2] = "Roche";
+    insert(flying, hashtable);
+
+    CombatEspece* Fantome = new CombatEspece;
+    Fantome->nature = "Fantome";
+    Fantome->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Fantome->strongAgainst[i] = nullptr;
+        Fantome->weakAgainst[i] = nullptr;
+    }
+    Fantome->strongAgainst[0] = "Fantome";
+    Fantome->strongAgainst[1] = "Psychique";
+    Fantome->weakAgainst[0] = "Dark";
+    Fantome->weakAgainst[1] = "Fantome";
+    insert(Fantome, hashtable);
+
+    CombatEspece* Herbe = new CombatEspece;
+    Herbe->nature = "Herbe";
+    Herbe->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Herbe->strongAgainst[i] = nullptr;
+        Herbe->weakAgainst[i] = nullptr;
+    }
+    Herbe->strongAgainst[0] = "Sol";
+    Herbe->strongAgainst[1] = "Roche";
+    Herbe->strongAgainst[2] = "Eau";
+    Herbe->weakAgainst[0] = "Bug";
+    Herbe->weakAgainst[1] = "Feu";
+    Herbe->weakAgainst[2] = "Flying";
+    Herbe->weakAgainst[3] = "Glace";
+    Herbe->weakAgainst[4] = "Poison";
+    insert(Herbe, hashtable);
+
+    CombatEspece* Sol= new CombatEspece;
+    Sol->nature = "Sol";
+    Sol->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Sol->strongAgainst[i] = nullptr;
+        Sol->weakAgainst[i] = nullptr;
+    }
+    Sol->strongAgainst[0] = "Electrique";
+    Sol->strongAgainst[1] = "Feu";
+    Sol->strongAgainst[2] = "Poison";
+    Sol->strongAgainst[3] = "Roche";
+    Sol->strongAgainst[4] = "Steel";
+    Sol->weakAgainst[0] = "Herbe";
+    Sol->weakAgainst[1] = "Glace";
+    Sol->weakAgainst[2] = "Eau";
+    insert(Sol, hashtable);
+
+    CombatEspece* Glace = new CombatEspece;
+    Glace->nature = "Glace";
+    Glace->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Glace->strongAgainst[i] = nullptr;
+        Glace->weakAgainst[i] = nullptr;
+    }
+    Glace->strongAgainst[0] = "Dragon";
+    Glace->strongAgainst[1] = "Flying";
+    Glace->strongAgainst[2] = "Herbe";
+    Glace->strongAgainst[3] = "Sol";
+    Glace->weakAgainst[0] = "Fight";
+    Glace->weakAgainst[1] = "Feu";
+    Glace->weakAgainst[2] = "Roche";
+    Glace->weakAgainst[3] = "Steel";
+    insert(Glace, hashtable);
+
+    CombatEspece* normal = new CombatEspece;
+    normal->nature = "Normal";
+    normal->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        normal->strongAgainst[i] = nullptr;
+        normal->weakAgainst[i] = nullptr;
+    }
+    normal->weakAgainst[0] = "Fight";
+    insert(normal, hashtable); // correction ici.
+
+    CombatEspece* poison = new CombatEspece;
+    poison->nature = "Poison";
+    poison->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        poison->strongAgainst[i] = nullptr;
+        poison->weakAgainst[i] = nullptr;
+    }
+    poison->strongAgainst[0] = "Fairy";
+    poison->strongAgainst[1] = "Herbe";
+    poison->weakAgainst[0] = "Sol";
+    poison->weakAgainst[1] = "Psychique";
+    insert(poison, hashtable);
+
+    CombatEspece* Psychique = new CombatEspece;
+    Psychique->nature = "Psychique";
+    Psychique->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Psychique->strongAgainst[i] = nullptr;
+        Psychique->weakAgainst[i] = nullptr;
+    }
+    Psychique->strongAgainst[0] = "Fight";
+    Psychique->strongAgainst[1] = "Poison";
+    Psychique->weakAgainst[0] = "Bug";
+    Psychique->weakAgainst[1] = "Dark";
+    Psychique->weakAgainst[2] = "Fantome";
+    insert(Psychique, hashtable);
+
+    CombatEspece* Roche = new CombatEspece;
+    Roche->nature = "Roche";
+    Roche->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Roche->strongAgainst[i] = nullptr;
+        Roche->weakAgainst[i] = nullptr;
+    }
+    Roche->strongAgainst[0] = "Bug";
+    Roche->strongAgainst[1] = "Feu";
+    Roche->strongAgainst[2] = "Flying";
+    Roche->strongAgainst[3] = "Glace";
+    Roche->weakAgainst[0] = "Fight";
+    Roche->weakAgainst[1] = "Herbe";
+    Roche->weakAgainst[2] = "Sol";
+    Roche->weakAgainst[3] = "Steel";
+    Roche->weakAgainst[4] = "Eau";
+    insert(Roche, hashtable);
+
+    CombatEspece* steel = new CombatEspece;
+    steel->nature = "Steel";
+    steel->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        steel->strongAgainst[i] = nullptr;
+        steel->weakAgainst[i] = nullptr;
+    }
+    steel->strongAgainst[0] = "Fairy";
+    steel->strongAgainst[1] = "Glace";
+    steel->strongAgainst[2] = "Roche";
+    steel->weakAgainst[0] = "Fight";
+    steel->weakAgainst[1] = "Feu";
+    steel->weakAgainst[2] = "Sol";
+    insert(steel, hashtable);
+
+    CombatEspece* Eau = new CombatEspece;
+    Eau->nature = "Eau";
+    Eau->next = nullptr;
+    for (i = 0; i < 5; i++)
+    {
+        Eau->strongAgainst[i] = nullptr;
+        Eau->weakAgainst[i] = nullptr;
+    }
+    Eau->strongAgainst[0] = "Feu";
+    Eau->strongAgainst[1] = "Sol";
+    Eau->strongAgainst[2] = "Roche";
+    Eau->weakAgainst[0] = "Electrique";
+    Eau->weakAgainst[1] = "Herbe";
+    insert(Eau, hashtable);
+
+    return hashtable;
 }

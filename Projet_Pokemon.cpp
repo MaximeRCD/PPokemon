@@ -11,6 +11,7 @@ int main()
 {
     //affiche_menu_jeu();
     //menu_interactif();
+    HashTable* myHashTable = initHashTable();
     return 0;    
 }
 
