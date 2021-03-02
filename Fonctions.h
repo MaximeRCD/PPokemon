@@ -35,4 +35,8 @@ Historique* initialisation();
 HashTable* initHT();
 // focntion de hashage
 int hashfct(std::string str, int max);
+//cherhcer le type de pok sous forme de string
+//string pokemonTypeToString(PokemonType t);
 
+// get alveole
+CombatEspece* get(HashTable* myHashtable, std::string key);

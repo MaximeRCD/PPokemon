@@ -1060,7 +1060,7 @@ Historique* initialisation()
 }
 
 HashTable* initHT() {
-    CombatEspece cases[26];
+    CombatEspece* cases[26] = { nullptr };
     HashTable myHashTable;
     myHashTable.nbr_alveole = 18;
     myHashTable.nbr_ele = 0;
@@ -1077,4 +1077,76 @@ int hashfct(string str, int max)
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
     }
     return (hash % max) ;
+}
+
+/*string pokemonTypeToString(PokemonType t) {
+    if(t == Normal) {
+        return "Normal";
+    } 
+    else if(t == Combat) {
+            return "Combat";
+        }
+    else if(t == Flying) {
+        return "Flying";
+        }
+    else if(t == Poison) {
+        return "Poison";
+        }
+    else if(t == Sol) {
+        return "Sol";
+        } 
+    else if(t == Roche) {
+        return "Roche";
+        } 
+    else if(t == Bug) {
+        return "Bug";
+            }
+    else if(t == Fantome) {
+        return "Fantome";
+            } 
+    else if(t == Steel) {
+        return "Steel";
+            } 
+    else if(t == Feu) {
+        return "Feu";
+            } 
+    else if(t == Herbe) {
+        return "Herbe";
+           }
+    else if(t == Eau) {
+        return "Eau";
+                } 
+    else if(t == Electrique) {
+        return "Electrique";
+                } 
+    else if(t == Psychique) {
+        return "Psychique";
+                } 
+    else if(t == Glace) {
+        return "Glace";
+                }
+    else if(t == Dragon) {
+        return "Dragon";
+                } 
+    else if(t == Dark) {
+        return "Dark";
+                    }
+    else {
+        return "Fairy";
+    }
+}*/
+
+CombatEspece* get(HashTable* myHashtable, string key) {
+    int c = hashfct(key, 26);
+    return (myHashtable->tab[c]);
+}
+
+bool contains(HashTable* myHashtable, CombatEspece* c) {
+    CombatEspece* element = get(myHashtable, c->nature);
+    return (element != nullptr);
+}
+
+void insert(CombatEspece* c, HashTable* myHashtable) {
+    int alveole = hashfct(c->nature, 26);
+    myHashtable->tab[alveole]=c;
 }

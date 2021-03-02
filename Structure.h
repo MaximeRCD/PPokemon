@@ -64,6 +64,6 @@ typedef struct HashTable {
 	*/
 	int nbr_ele;
 	int nbr_alveole;
-	CombatEspece* tab; 
+	CombatEspece** tab; // tableau de pointeur
 }hashTable;
 
