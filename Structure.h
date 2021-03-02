@@ -54,3 +54,4 @@ typedef struct CombatEspece {
 	CombatEspece* next;
 }combatEspece;
 
+
