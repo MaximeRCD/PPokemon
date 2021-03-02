@@ -33,3 +33,6 @@ void insert_evolution(historique* mon_historique, std::string from, std::string 
 Historique* initialisation();
 // initialisation de la structure hashtable
 HashTable* initHT();
+// focntion de hashage
+int hashfct(std::string str, int max);
+

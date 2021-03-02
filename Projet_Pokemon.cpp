@@ -11,7 +11,6 @@ int main()
 {
     //affiche_menu_jeu();
     //menu_interactif();
-
     return 0;    
 }
 
