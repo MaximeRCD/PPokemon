@@ -4,7 +4,6 @@
 using namespace std;
 
 
-
 void init_bestiaire(especePokemon bestiaire[]) {
 	for (int i = 0; i < 150; i++) {
         bestiaire[i].estEvolue = 1;
@@ -1022,8 +1021,6 @@ void evolve(pokemon* p, especePokemon* bestiaire, ressources* r, historique* mon
     }
 }
 
-
-
 void insert_evolution(historique* mon_historique, string from, string to) {
     /*Création du nouvel élément*/
     Evolution* nouveau = new evolution;
@@ -1059,16 +1056,6 @@ Historique* initialisation()
     return mon_historique;
 }
 
-/*HashTable* initHT() {
-    CombatEspece* cases[26] = { nullptr };
-    HashTable myHashTable;
-    myHashTable.nbr_alveole = 18;
-    myHashTable.nbr_ele = 0;
-    myHashTable.tab = cases;
-
-    return &myHashTable;
-}*/
-
 int hashfct(string str, int max)
 {
     unsigned long hash = 5381;
@@ -1079,69 +1066,9 @@ int hashfct(string str, int max)
     return (hash % max) ;
 }
 
-/*string pokemonTypeToString(PokemonType t) {
-    if(t == Normal) {
-        return "Normal";
-    } 
-    else if(t == Combat) {
-            return "Combat";
-        }
-    else if(t == Flying) {
-        return "Flying";
-        }
-    else if(t == Poison) {
-        return "Poison";
-        }
-    else if(t == Sol) {
-        return "Sol";
-        } 
-    else if(t == Roche) {
-        return "Roche";
-        } 
-    else if(t == Bug) {
-        return "Bug";
-            }
-    else if(t == Fantome) {
-        return "Fantome";
-            } 
-    else if(t == Steel) {
-        return "Steel";
-            } 
-    else if(t == Feu) {
-        return "Feu";
-            } 
-    else if(t == Herbe) {
-        return "Herbe";
-           }
-    else if(t == Eau) {
-        return "Eau";
-                } 
-    else if(t == Electrique) {
-        return "Electrique";
-                } 
-    else if(t == Psychique) {
-        return "Psychique";
-                } 
-    else if(t == Glace) {
-        return "Glace";
-                }
-    else if(t == Dragon) {
-        return "Dragon";
-                } 
-    else if(t == Dark) {
-        return "Dark";
-                    }
-    else {
-        return "Fairy";
-    }
-}*/
-
 CombatEspece* getalveole(HashTable* myHashtable, string key) {
     // recurepère la valeur de hachage associé au type voulu
     int c = hashfct(key, 26);
-   
-    // création d'un pointeur combat espece de sauv
-    //CombatEspece* sauv = nullptr;
     
     // si ce pointeur n'est pas null 
     if (myHashtable->tab[c] != nullptr){
@@ -1502,29 +1429,15 @@ HashTable* initHashTable(HashTable* hashtable)
     Eau->weakAgainst[0] = "Electrique";
     Eau->weakAgainst[1] = "Herbe";
     insert(Eau, hashtable);
-
-    /*for (int i = 0; i < 26; i++) {
-        if (hashtable->tab[i] != nullptr)
-        {
-            CombatEspece* sauv = hashtable->tab[i]->first;
-            for (int a = 0; a < hashtable->tab[i]->nbr_espece; a++) {
-                cout << i << " - " << sauv->nature << endl;
-                sauv = sauv->next;
-            }
-        }
-    }*/
-
-    //Head* c = hashtable->tab[17];
-
     return hashtable;
 }
 
 void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHashtable) {
     
+    cout << endl;
     cout << "################################################################################################" << endl;
     cout << "##################################### Place au combat ##########################################" << endl;
     cout << "Entrer les indices des deux pokemons a faire combattre !" << endl;
-    Head* c = myHashtable->tab[17];
     // choix des pokémons à faire combattre
     int a;
     int b;
@@ -1544,8 +1457,10 @@ void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHas
 
     // implémentation de l'attaque des pokemons a et b 
     // vérification si typeb in strong against a et inversement
+
     int attA = 30;
     int attB = 30;
+
     for (int i = 0; i < 5; i++) {
         if (typeb == espa->strongAgainst[i]) {
             attA *= 3;

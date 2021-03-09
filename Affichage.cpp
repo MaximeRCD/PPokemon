@@ -58,23 +58,9 @@ void menu_interactif() {
     int choice;
     HashTable* myHashTable = new HashTable;
     initHashTable(myHashTable);
-    //Head* c = myHashTable->tab[17];
-    
-    /*for (int i = 0; i < 26; i++)
-    {
-        if (myHashTable->tab[i] != nullptr)
-        {
-            CombatEspece* sauv = myHashTable->tab[i]->first;
-            for (int a = 0; a < myHashTable->tab[i]->nbr_espece; a++) {
-                cout << i << " - " << sauv->nature << endl;
-                sauv = sauv->next;
-            }
-        }
-    }*/
 
     do
     {
-        //Head* A = myHashTable->tab[17];
         choice = choix();
 
         switch (choice)

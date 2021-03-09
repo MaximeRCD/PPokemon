@@ -33,12 +33,9 @@ void evolve(pokemon* p, especePokemon* bestiaire, ressources* r, historique* mon
 void insert_evolution(historique* mon_historique, std::string from, std::string to);
 
 Historique* initialisation();
-// initialisation de la structure hashtable
-HashTable* initHT();
+
 // focntion de hashage
 int hashfct(std::string str, int max);
-//cherhcer le type de pok sous forme de string
-//string pokemonTypeToString(PokemonType t);
 
 // get alveole
 CombatEspece* getalveole(HashTable* myHashtable, std::string key);
