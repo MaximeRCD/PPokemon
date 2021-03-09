@@ -932,7 +932,7 @@ void insertPokemon(Pokedex* po, pokemon* p) {
 // Returns in the closed interval [0, max]
 long random_at_most(long max)
 {
-    unsigned long
+    /*unsigned long
         // max <= RAND_MAX < ULONG_MAX, so this is okay.
         num_bins = (unsigned long)max + 1,
         num_rand = (unsigned long)RAND_MAX + 1,
@@ -946,7 +946,10 @@ long random_at_most(long max)
     // This is carefully written not to overflow
     while (num_rand - defect <= (unsigned long)x);
     // Truncated division is intentional
-    return x / bin_size;
+    return x / bin_size;*/
+    srand(time(NULL));
+    long x = rand() % max;
+    return x;
 }
 
 void init_pokemon(pokemon* p, string name, int exp, int pdv, int niv, int cp) {
@@ -983,7 +986,7 @@ void powerUp(pokemon* p, ressources* r)
     {
         r->bonbons -= 10;
         r->poussieres -= 500;
-        p->cp = floor(float(p->cp + 2.25 * p->cp));
+        p->cp = floor(float(p->cp + random_at_most(4)*p->cp));
     }
     else
     {
@@ -1458,15 +1461,15 @@ void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHas
     // implémentation de l'attaque des pokemons a et b 
     // vérification si typeb in strong against a et inversement
 
-    int attA = 30;
-    int attB = 30;
+    int attA = floor((float(0.1* po->mesPokemons[a].cp)));
+    int attB = floor((float(0.1 * po->mesPokemons[b].cp)));
 
     for (int i = 0; i < 5; i++) {
         if (typeb == espa->strongAgainst[i]) {
-            attA *= 3;
+            attA *= 4;
         }
         else if (typeb == espa->weakAgainst[i]) {
-            attB *= 3;
+            attB *= 4;
         }
     }
 
@@ -1477,10 +1480,14 @@ void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHas
     // 0 c'est pokemon a 
     int pva = po->mesPokemons[a].pv;
     int pvb = po->mesPokemons[b].pv;
+    cout << po->mesPokemons[a].nom << " a une attaque à " << attA << " contre " << po->mesPokemons[b].nom << "et possède " << pva << " points de vie " << endl;
+    cout << po->mesPokemons[b].nom << " a une attaque à " << attB << " contre " << po->mesPokemons[a].nom << "et possède " << pvb << " points de vie " << endl;
     if (aleatoire) {
         do {
             pvb -= attA;
+            cout << po->mesPokemons[a].nom << " attaque. Il reste " << pvb << " points de vie à " << po->mesPokemons[b].nom << endl;
             pva -= attB;
+            cout << po->mesPokemons[b].nom << " attaque. Il reste " << pva << " points de vie à " << po->mesPokemons[a].nom << endl;
         } while (pva > 0 && pvb > 0);
         if ((pva - pvb) > 0) {
             cout << po->mesPokemons[a].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[b].nom<< endl;
@@ -1489,7 +1496,9 @@ void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHas
     else {
         do {
             pva -= attB;
+            cout << po->mesPokemons[b].nom << " attaque. Il reste " << pva << " points de vie à " << po->mesPokemons[a].nom << endl;
             pvb -= attA;
+            cout << po->mesPokemons[a].nom << " attaque. Il reste " << pvb << " points de vie à " << po->mesPokemons[b].nom << endl;
         } while (pva > 0 && pvb > 0);
         if ((pva - pvb) > 0) {
             cout << po->mesPokemons[a].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[b].nom << endl;
