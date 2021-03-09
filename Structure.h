@@ -54,6 +54,12 @@ typedef struct CombatEspece {
 	CombatEspece* next;
 }combatEspece;
 
+typedef struct Head {
+	int nbr_espece;
+	int hash;
+	CombatEspece* first;
+}head;
+
 typedef struct HashTable {
 	/*Le facteur de compression (load factor) qui est la proportion d'alvéoles utilisées dans une table de hachage est une indication critique de ses performances.
 		Il est défini ainsi :
@@ -64,6 +70,6 @@ typedef struct HashTable {
 	*/
 	int nbr_ele;
 	int nbr_alveole;
-	CombatEspece** tab; // tableau de pointeur
+	Head** tab; // tableau de pointeur
 }hashTable;
 

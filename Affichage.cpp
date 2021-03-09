@@ -56,8 +56,25 @@ void menu_interactif() {
     Historique* mon_historique;
     mon_historique = initialisation();
     int choice;
+    HashTable* myHashTable = new HashTable;
+    initHashTable(myHashTable);
+    //Head* c = myHashTable->tab[17];
+    
+    /*for (int i = 0; i < 26; i++)
+    {
+        if (myHashTable->tab[i] != nullptr)
+        {
+            CombatEspece* sauv = myHashTable->tab[i]->first;
+            for (int a = 0; a < myHashTable->tab[i]->nbr_espece; a++) {
+                cout << i << " - " << sauv->nature << endl;
+                sauv = sauv->next;
+            }
+        }
+    }*/
+
     do
     {
+        //Head* A = myHashTable->tab[17];
         choice = choix();
 
         switch (choice)
@@ -144,8 +161,12 @@ void menu_interactif() {
                     cout << " Merci de resaisir une valeur " << endl;
                 }
             } while (entier != 4);
-        case 5:
-            break;// Combat
+            break;
+        case 5: {
+            affichage_Pokedex(&mon_pokedex, bestiaire, typelabel, &mes_ressources);
+            combat(&mon_pokedex, bestiaire, typelabel, myHashTable);
+            affiche_menu_jeu();
+            break; }
         case 6:
             break;
         default:

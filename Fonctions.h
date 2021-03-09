@@ -2,6 +2,8 @@
 #include "Structure.h"
 #include <cmath>
 #include <cstdlib>
+#include<stdlib.h>
+#include<time.h>
 
 // initialisation du bestiaire
 void init_bestiaire(especePokemon bestiaire[]);
@@ -39,10 +41,12 @@ int hashfct(std::string str, int max);
 //string pokemonTypeToString(PokemonType t);
 
 // get alveole
-CombatEspece* get(HashTable* myHashtable, std::string key);
+CombatEspece* getalveole(HashTable* myHashtable, std::string key);
 // la table contient il cette clé
 bool contains(HashTable* myHashtable, CombatEspece* c);
 // insert table de hachage
 void insert(CombatEspece* c, HashTable* myHashtable);
 //init HT
-HashTable* initHashTable();
+HashTable* initHashTable(HashTable* hashtable);
+// combat
+void combat(Pokedex* po, especePokemon* bestiaire, std::string* tab, HashTable* myHashtable);

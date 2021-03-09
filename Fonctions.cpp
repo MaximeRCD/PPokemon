@@ -1001,7 +1001,7 @@ void evolve(pokemon* p, especePokemon* bestiaire, ressources* r, historique* mon
         //int res = strcmp(bestiaire[i].evolvesTo, "Aucune evolution");
         if (bestiaire[i].nom == p->nom && bestiaire[i].evolution != "Aucune evolution")
         {
-            if (r->bonbons >= bestiaire[i].nb_bonbon_to_evolv)
+            if (r->bonbons >= (int)bestiaire[i].nb_bonbon_to_evolv)
             {
                 insert_evolution(mon_historique, p->nom, bestiaire[i].evolution);
                 r->bonbons -= bestiaire[i].nb_bonbon_to_evolv;
@@ -1059,7 +1059,7 @@ Historique* initialisation()
     return mon_historique;
 }
 
-HashTable* initHT() {
+/*HashTable* initHT() {
     CombatEspece* cases[26] = { nullptr };
     HashTable myHashTable;
     myHashTable.nbr_alveole = 18;
@@ -1067,14 +1067,14 @@ HashTable* initHT() {
     myHashTable.tab = cases;
 
     return &myHashTable;
-}
+}*/
 
 int hashfct(string str, int max)
 {
     unsigned long hash = 5381;
     int c;
     for (char c : str) {
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = hash * 33+ c;
     }
     return (hash % max) ;
 }
@@ -1136,40 +1136,98 @@ int hashfct(string str, int max)
     }
 }*/
 
-CombatEspece* get(HashTable* myHashtable, string key) {
+CombatEspece* getalveole(HashTable* myHashtable, string key) {
+    // recurepère la valeur de hachage associé au type voulu
     int c = hashfct(key, 26);
-    return (myHashtable->tab[c]);
+   
+    // création d'un pointeur combat espece de sauv
+    //CombatEspece* sauv = nullptr;
+    
+    // si ce pointeur n'est pas null 
+    if (myHashtable->tab[c] != nullptr){
+    
+        //alors sauv prend la valeur de la première espece dans l'alveole correspondante
+        
+        CombatEspece* sauv = myHashtable->tab[c]->first;
+        
+        //tant que l'espece suiviante n'est pas un pointeur null ie fin de liste et que le type de pokemon ne correspond pas au type chercher
+        while (sauv != nullptr && sauv->nature != key) {
+        
+            //on parcourt la liste
+            sauv = sauv->next;
+        }
+        
+        // on renvoie le pointeur vers la bonne espece
+        return (sauv);
+    }
+    
 }
 
 bool contains(HashTable* myHashtable, CombatEspece* c) {
-    CombatEspece* element = get(myHashtable, c->nature);
+    CombatEspece* element = getalveole(myHashtable, c->nature);
     return (element != nullptr);
 }
 
 void insert(CombatEspece* c, HashTable* myHashtable) {
+    // renvoie la valeur de hachage du type voulu
     int alveole = hashfct(c->nature, 26);
-    myHashtable->tab[alveole]=c;
+    // montre dans quelle alveole est l'espece de type donné
+    //cout <<c->nature <<  "   " << alveole << endl;
+    
+    // si la tête de list est un pointeur null, ie , pas d'espece dans l'alveole
+    if (myHashtable->tab[alveole] == nullptr) {
+        // créeation et initialisation d'une tête de liste
+        Head* tabhead = new Head;
+        tabhead->hash = alveole;
+        tabhead->nbr_espece = 0;
+        // la première espece et en têt de liste
+        tabhead->first = c;
+        // l'alveole de numéro valeur hachage pointe vers la tête de liste
+        myHashtable->tab[alveole] = tabhead;
+        // incrémentation du nombre d'espece dans l'alveole
+        myHashtable->tab[alveole]->nbr_espece++;
+        // incrementation du nombre d'espece dans la table de hachage
+        myHashtable->nbr_ele++;
+
+    }
+    else
+    {
+        // decallage de la tête de liste
+        c->next = myHashtable->tab[alveole]->first;
+        // mise de l'espece en tête de liste
+        myHashtable->tab[alveole]->first = c;
+        //incrementation des nbr
+        myHashtable->tab[alveole]->nbr_espece++;
+        myHashtable->nbr_ele++;
+
+    }
 }
 
-HashTable* initHashTable()
+HashTable* initHashTable(HashTable* hashtable)
 {
-    HashTable* hashtable = new HashTable;
+    
+    //HashTable myhashtable; variable local initialisé sur la pile
+    //HashTable* hashtable = &myhashtable; // pointeur sur l'adresse d'une variable sur la pile avec la portée initHT 
+    //HashTable* hashtable = new HashTable; // pointeur sur la pile (mémoire de faible capacit" qui enregistre les appels entre les fonctions) vers une variable sur le tas. malloc et new est une allocation de la mémoire vive 
+    hashtable->nbr_ele = 0;
     hashtable->nbr_alveole = 18;
+    //Head* cases[26]; //
+    hashtable->tab = new Head*[26];
+
     // Initialisation
     for (int k = 0; k < 26; k++)
     {
-        hashtable->tab[k] = nullptr;
+        hashtable->tab[k]= nullptr;
     }
 
     // Insertions successives
-    int i = -1;
     CombatEspece* bug = new CombatEspece;
     bug->nature = "Bug";
     bug->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        bug->strongAgainst[i] = nullptr;
-        bug->weakAgainst[i] = nullptr;
+        bug->strongAgainst[i] = "none";
+        bug->weakAgainst[i] = "none";
     }
     bug->strongAgainst[0] = "Dark";
     bug->strongAgainst[1] = "Herbe";
@@ -1182,10 +1240,10 @@ HashTable* initHashTable()
     CombatEspece* dark = new CombatEspece;
     dark->nature = "Dark";
     dark->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        dark->strongAgainst[i] = nullptr;
-        dark->weakAgainst[i] = nullptr;
+        dark->strongAgainst[i] = "none";
+        dark->weakAgainst[i] = "none";
     }
     dark->strongAgainst[0] = "Fantome";
     dark->strongAgainst[1] = "Psychique";
@@ -1197,10 +1255,10 @@ HashTable* initHashTable()
     CombatEspece* dragon = new CombatEspece;
     dragon->nature = "Dragon";
     dragon->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        dragon->strongAgainst[i] = nullptr;
-        dragon->weakAgainst[i] = nullptr;
+        dragon->strongAgainst[i] = "none";
+        dragon->weakAgainst[i] = "none";
     }
     dragon->strongAgainst[0] = "Dragon";
     dragon->weakAgainst[0] = "Dragon";
@@ -1211,10 +1269,10 @@ HashTable* initHashTable()
     CombatEspece* Electrique = new CombatEspece;
     Electrique->nature = "Electrique";
     Electrique->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Electrique->strongAgainst[i] = nullptr;
-        Electrique->weakAgainst[i] = nullptr;
+        Electrique->strongAgainst[i] = "none";
+        Electrique->weakAgainst[i] = "none";
     }
     Electrique->strongAgainst[0] = "Flying";
     Electrique->strongAgainst[1] = "Eau";
@@ -1224,10 +1282,10 @@ HashTable* initHashTable()
     CombatEspece* fairy = new CombatEspece;
     fairy->nature = "Fairy";
     fairy->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        fairy->strongAgainst[i] = nullptr;
-        fairy->weakAgainst[i] = nullptr;
+        fairy->strongAgainst[i] = "none";
+        fairy->weakAgainst[i] = "none";
     }
     fairy->strongAgainst[0] = "Dark";
     fairy->strongAgainst[1] = "Dragon";
@@ -1239,10 +1297,10 @@ HashTable* initHashTable()
     CombatEspece* fighting = new CombatEspece;
     fighting->nature = "Fighting";
     fighting->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        fighting->strongAgainst[i] = nullptr;
-        fighting->weakAgainst[i] = nullptr;
+        fighting->strongAgainst[i] = "none";
+        fighting->weakAgainst[i] = "none";
     }
     fighting->strongAgainst[0] = "Dark";
     fighting->strongAgainst[1] = "Glace";
@@ -1257,10 +1315,10 @@ HashTable* initHashTable()
     CombatEspece* Feu = new CombatEspece;
     Feu->nature = "Feu";
     Feu->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Feu->strongAgainst[i] = nullptr;
-        Feu->weakAgainst[i] = nullptr;
+        Feu->strongAgainst[i] = "none";
+        Feu->weakAgainst[i] = "none";
     }
     Feu->strongAgainst[0] = "Bug";
     Feu->strongAgainst[1] = "Herbe";
@@ -1274,10 +1332,10 @@ HashTable* initHashTable()
     CombatEspece* flying = new CombatEspece;
     flying->nature = "Flying";
     flying->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        flying->strongAgainst[i] = nullptr;
-        flying->weakAgainst[i] = nullptr;
+        flying->strongAgainst[i] = "none";
+        flying->weakAgainst[i] = "none";
     }
     flying->strongAgainst[0] = "Bug";
     flying->strongAgainst[1] = "Fight";
@@ -1290,10 +1348,10 @@ HashTable* initHashTable()
     CombatEspece* Fantome = new CombatEspece;
     Fantome->nature = "Fantome";
     Fantome->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Fantome->strongAgainst[i] = nullptr;
-        Fantome->weakAgainst[i] = nullptr;
+        Fantome->strongAgainst[i] = "none";
+        Fantome->weakAgainst[i] = "none";
     }
     Fantome->strongAgainst[0] = "Fantome";
     Fantome->strongAgainst[1] = "Psychique";
@@ -1304,10 +1362,10 @@ HashTable* initHashTable()
     CombatEspece* Herbe = new CombatEspece;
     Herbe->nature = "Herbe";
     Herbe->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Herbe->strongAgainst[i] = nullptr;
-        Herbe->weakAgainst[i] = nullptr;
+        Herbe->strongAgainst[i] = "none";
+        Herbe->weakAgainst[i] = "none";
     }
     Herbe->strongAgainst[0] = "Sol";
     Herbe->strongAgainst[1] = "Roche";
@@ -1322,10 +1380,10 @@ HashTable* initHashTable()
     CombatEspece* Sol= new CombatEspece;
     Sol->nature = "Sol";
     Sol->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Sol->strongAgainst[i] = nullptr;
-        Sol->weakAgainst[i] = nullptr;
+        Sol->strongAgainst[i] = "none";
+        Sol->weakAgainst[i] = "none";
     }
     Sol->strongAgainst[0] = "Electrique";
     Sol->strongAgainst[1] = "Feu";
@@ -1340,10 +1398,10 @@ HashTable* initHashTable()
     CombatEspece* Glace = new CombatEspece;
     Glace->nature = "Glace";
     Glace->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Glace->strongAgainst[i] = nullptr;
-        Glace->weakAgainst[i] = nullptr;
+        Glace->strongAgainst[i] = "none";
+        Glace->weakAgainst[i] = "none";
     }
     Glace->strongAgainst[0] = "Dragon";
     Glace->strongAgainst[1] = "Flying";
@@ -1358,10 +1416,10 @@ HashTable* initHashTable()
     CombatEspece* normal = new CombatEspece;
     normal->nature = "Normal";
     normal->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        normal->strongAgainst[i] = nullptr;
-        normal->weakAgainst[i] = nullptr;
+        normal->strongAgainst[i] = "none";
+        normal->weakAgainst[i] = "none";
     }
     normal->weakAgainst[0] = "Fight";
     insert(normal, hashtable); // correction ici.
@@ -1369,10 +1427,10 @@ HashTable* initHashTable()
     CombatEspece* poison = new CombatEspece;
     poison->nature = "Poison";
     poison->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        poison->strongAgainst[i] = nullptr;
-        poison->weakAgainst[i] = nullptr;
+        poison->strongAgainst[i] = "none";
+        poison->weakAgainst[i] = "none";
     }
     poison->strongAgainst[0] = "Fairy";
     poison->strongAgainst[1] = "Herbe";
@@ -1383,10 +1441,10 @@ HashTable* initHashTable()
     CombatEspece* Psychique = new CombatEspece;
     Psychique->nature = "Psychique";
     Psychique->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Psychique->strongAgainst[i] = nullptr;
-        Psychique->weakAgainst[i] = nullptr;
+        Psychique->strongAgainst[i] = "none";
+        Psychique->weakAgainst[i] = "none";
     }
     Psychique->strongAgainst[0] = "Fight";
     Psychique->strongAgainst[1] = "Poison";
@@ -1398,10 +1456,10 @@ HashTable* initHashTable()
     CombatEspece* Roche = new CombatEspece;
     Roche->nature = "Roche";
     Roche->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Roche->strongAgainst[i] = nullptr;
-        Roche->weakAgainst[i] = nullptr;
+        Roche->strongAgainst[i] = "none";
+        Roche->weakAgainst[i] = "none";
     }
     Roche->strongAgainst[0] = "Bug";
     Roche->strongAgainst[1] = "Feu";
@@ -1417,10 +1475,10 @@ HashTable* initHashTable()
     CombatEspece* steel = new CombatEspece;
     steel->nature = "Steel";
     steel->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        steel->strongAgainst[i] = nullptr;
-        steel->weakAgainst[i] = nullptr;
+        steel->strongAgainst[i] = "none";
+        steel->weakAgainst[i] = "none";
     }
     steel->strongAgainst[0] = "Fairy";
     steel->strongAgainst[1] = "Glace";
@@ -1433,10 +1491,10 @@ HashTable* initHashTable()
     CombatEspece* Eau = new CombatEspece;
     Eau->nature = "Eau";
     Eau->next = nullptr;
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        Eau->strongAgainst[i] = nullptr;
-        Eau->weakAgainst[i] = nullptr;
+        Eau->strongAgainst[i] = "none";
+        Eau->weakAgainst[i] = "none";
     }
     Eau->strongAgainst[0] = "Feu";
     Eau->strongAgainst[1] = "Sol";
@@ -1445,5 +1503,82 @@ HashTable* initHashTable()
     Eau->weakAgainst[1] = "Herbe";
     insert(Eau, hashtable);
 
+    /*for (int i = 0; i < 26; i++) {
+        if (hashtable->tab[i] != nullptr)
+        {
+            CombatEspece* sauv = hashtable->tab[i]->first;
+            for (int a = 0; a < hashtable->tab[i]->nbr_espece; a++) {
+                cout << i << " - " << sauv->nature << endl;
+                sauv = sauv->next;
+            }
+        }
+    }*/
+
+    //Head* c = hashtable->tab[17];
+
     return hashtable;
+}
+
+void combat(Pokedex* po, especePokemon* bestiaire, string* tab, HashTable* myHashtable) {
+    
+    cout << "################################################################################################" << endl;
+    cout << "##################################### Place au combat ##########################################" << endl;
+    cout << "Entrer les indices des deux pokemons a faire combattre !" << endl;
+    Head* c = myHashtable->tab[17];
+    // choix des pokémons à faire combattre
+    int a;
+    int b;
+    cin >> a;
+    cin >> b;
+    
+    // récupération de leur type 
+
+    string typea = cherchertypepok(bestiaire, po->mesPokemons[a].nom, tab);
+    string typeb = cherchertypepok(bestiaire, po->mesPokemons[b].nom, tab);
+
+    // recupération de leur espece de combat
+    
+
+    CombatEspece* espa = getalveole(myHashtable, typea);
+    CombatEspece* espb = getalveole(myHashtable, typeb);
+
+    // implémentation de l'attaque des pokemons a et b 
+    // vérification si typeb in strong against a et inversement
+    int attA = 30;
+    int attB = 30;
+    for (int i = 0; i < 5; i++) {
+        if (typeb == espa->strongAgainst[i]) {
+            attA *= 3;
+        }
+        else if (typeb == espa->weakAgainst[i]) {
+            attB *= 3;
+        }
+    }
+
+    //choix du premier pokemon qui attaque
+    int aleatoire;
+    srand(time(NULL));
+    aleatoire = (rand() % 2);
+    // 0 c'est pokemon a 
+    int pva = po->mesPokemons[a].pv;
+    int pvb = po->mesPokemons[b].pv;
+    if (aleatoire) {
+        do {
+            pvb -= attA;
+            pva -= attB;
+        } while (pva > 0 && pvb > 0);
+        if ((pva - pvb) > 0) {
+            cout << po->mesPokemons[a].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[b].nom<< endl;
+        }else{ cout << po->mesPokemons[b].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[a].nom << endl; }
+    }
+    else {
+        do {
+            pva -= attB;
+            pvb -= attA;
+        } while (pva > 0 && pvb > 0);
+        if ((pva - pvb) > 0) {
+            cout << po->mesPokemons[a].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[b].nom << endl;
+        }
+        else { cout << po->mesPokemons[b].nom << " est sorti vainqueur de son duel face a " << po->mesPokemons[a].nom << endl; }
+    }  
 }
